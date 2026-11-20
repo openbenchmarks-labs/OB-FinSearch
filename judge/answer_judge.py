@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import json
 import os
-import re
 import time
 from pathlib import Path
 from typing import Any
@@ -20,6 +19,29 @@ def judge_client() -> Any:
     if not os.environ.get("ANTHROPIC_API_KEY"):
         raise RuntimeError("ANTHROPIC_API_KEY is not set (see .env.example)")
     return anthropic.Anthropic(max_retries=4)
+
+
+def parse_judge_payload(text: str) -> dict[str, Any]:
+    """The first JSON object that carries a correct/incorrect verdict.
+
+    A reply can mention other braces before that object. Taking the first `{`
+    through the last `}` makes a real verdict unreadable.
+    """
+    decoder = json.JSONDecoder()
+    body = text or ""
+    index = 0
+    while True:
+        start = body.find("{", index)
+        if start < 0:
+            return {}
+        try:
+            payload, end = decoder.raw_decode(body, start)
+        except json.JSONDecodeError:
+            index = start + 1
+            continue
+        if isinstance(payload, dict) and "correct" in payload:
+            return payload
+        index = end
 
 
 def judge(client: Any, q: dict[str, Any], candidate: str) -> dict[str, Any]:
@@ -40,11 +62,7 @@ def judge(client: Any, q: dict[str, Any], candidate: str) -> dict[str, Any]:
     if response.stop_reason == "refusal":
         return base | {"correct": False, "reason": "judge refused", "judge_error": "refusal"}
     text = "".join(b.text for b in response.content if b.type == "text")
-    match = re.search(r"\{.*\}", text, re.S)
-    try:
-        verdict = json.loads(match.group(0)) if match else {}
-    except json.JSONDecodeError:
-        verdict = {}
+    verdict = parse_judge_payload(text)
     if "correct" not in verdict:
         return base | {"correct": False, "reason": f"unparseable judge output: {text[:200]}", "judge_error": "parse"}
     return base | {"correct": bool(verdict["correct"]), "reason": str(verdict.get("reason", ""))}
