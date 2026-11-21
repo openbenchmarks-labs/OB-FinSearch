@@ -27,6 +27,15 @@ def test_single_file_needs_a_class(tmp_path):
         load_questions(str(f))
 
 
+def test_single_file_reads_lookup(tmp_path):
+    f = tmp_path / "x.jsonl"
+    _write(f, [{"id": "a", "question": "Q", "answer": "A", "lookup": "multi_hop", "search": "single"},
+               {"id": "b", "question": "Q", "answer": "A", "lookup": "historical"}])
+    qs = {q["id"]: q for q in load_questions(str(f))}
+    assert qs["a"]["search"] == "multi" and qs["a"]["task"] == "multi-hop-lookup"
+    assert qs["b"]["search"] == "single"
+
+
 def test_duplicate_ids_rejected(tmp_path):
     f = tmp_path / "x.jsonl"
     _write(f, [{"id": "a", "question": "Q", "answer": "A", "search": "single"}] * 2)

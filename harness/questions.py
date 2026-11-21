@@ -4,8 +4,9 @@
   hf:<owner>/<name>[@<revision>]   a Hugging Face dataset repo with historical-lookup.jsonl,
                                     multi-hop-lookup.jsonl and live-lookup.jsonl at its root (the default)
   <directory>                       a local folder with the same files
-  <file>.jsonl                      one file; each row needs id, question, answer, tolerance and either
-                                    `search` (single | multi) or `task` (historical-lookup | multi-hop-lookup)
+  <file>.jsonl                      one file; each row needs id, question, answer, tolerance and one of
+                                    `lookup` (historical | multi_hop), `task` (historical-lookup |
+                                    multi-hop-lookup) or `search` (single | multi)
 """
 
 from __future__ import annotations
@@ -43,10 +44,12 @@ def _normalise(row: dict, task: str | None, source: str) -> dict:
     q.setdefault("question", q.get("query"))
     if task:
         q["search"] = config.CONFIGS[task]
+    elif q.get("lookup") in config.LOOKUPS:
+        q["search"] = config.LOOKUPS[q["lookup"]]
     elif q.get("task") in config.CONFIGS:
         q["search"] = config.CONFIGS[q["task"]]
     if q.get("search") not in ("single", "multi"):
-        raise ValueError(f"{source}: row {q.get('id')} has no search class (set `search` or `task`)")
+        raise ValueError(f"{source}: row {q.get('id')} has no search class (set `lookup`, `task` or `search`)")
     q["task"] = "historical-lookup" if q["search"] == "single" else "multi-hop-lookup"
     for k in ("id", "question", "answer"):
         if not q.get(k):

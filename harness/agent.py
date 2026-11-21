@@ -24,7 +24,7 @@ SYSTEM_PROMPT = (Path(__file__).parent / "agent_prompt.txt").read_text().rstrip(
 WEB_SEARCH_TOOL = {
     "type": "function",
     "name": "web_search",
-    "description": "Search the web. Returns up to 10 results with url, title and snippet.",
+    "description": "Search the web. Returns up to 10 web results with url, title and snippet, plus any data records the search provider adds.",
     "parameters": {
         "type": "object",
         "properties": {"query": {"type": "string", "description": "The search query."}},

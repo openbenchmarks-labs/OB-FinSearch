@@ -10,8 +10,8 @@ Published and maintained by **[OpenBenchmarks Labs](https://openbenchmarks.com)*
 
 The benchmark evaluates search APIs across three financial task types:
 
-- **Historical lookup** — Single-search factual questions asking for one published figure for a named entity and period.
-- **Multi-hop lookup** — Multi-search questions combining several published facts (such as peer rankings or trends).
+- **Historical lookup** — Questions answered from one or two documents, such as a filing and its earnings call. 2 searches.
+- **Multi-hop lookup** — Questions that combine figures from three or more documents into a ranking, trend or comparison. 6 searches.
 - **Live lookup** — Single-query market-moment questions asking for a stock's official close or a coin's traded price window, graded against verified market answer keys (`--closes`, `--coin-key`).
 
 For historical and multi-hop tasks, the agent receives only the question, date, and search snippets (url, title, snippet) with page fetching disabled (`--mode search`). `judge/answer_judge.py` grades each answer against ground truth within its tolerance, and `judge/board_summary.py` computes accuracy, repeat variance, and cost.

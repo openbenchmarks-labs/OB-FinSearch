@@ -32,7 +32,8 @@ UTC = timezone.utc
 BUFFER = {"large": 0.0010, "mid": 0.0025, "small": 0.0050}   # coin price buffer by market-cap band
 DEFAULT_SIZE = "mid"
 HISTORY = timedelta(hours=4)
-EXTRACT_MODEL = config.CLASS_MODELS["multi"][0]
+EXTRACT_MODEL = "gpt-5.6-sol"
+EXTRACT_EFFORT = "medium"
 EXTRACT_PROMPTS = {asset: (Path(__file__).parent / f"live_extract_{asset}_prompt.txt").read_text().rstrip("\n")
                    for asset in ("equity", "crypto")}
 
@@ -75,7 +76,7 @@ def extract(llm, r: dict, cfg: dict, tries: int = 3) -> dict:
     for _ in range(tries):
         try:
             resp = llm.responses.create(
-                model=EXTRACT_MODEL, reasoning={"effort": "medium"}, store=False, max_output_tokens=4000,
+                model=EXTRACT_MODEL, reasoning={"effort": EXTRACT_EFFORT}, store=False, max_output_tokens=4000,
                 text={"format": {"type": "json_schema", "name": f"{r['asset']}_price", "schema": SCHEMAS[r["asset"]],
                                  "strict": True}},
                 input=[{"role": "user", "content": prompt}])
@@ -90,9 +91,9 @@ def extract(llm, r: dict, cfg: dict, tries: int = 3) -> dict:
 
 
 def extract_cost(ex: dict) -> float:
-    """What the extraction call cost, priced as the reference model (see PRICES in harness/config.py)."""
+    """What the extraction call cost (see PRICES in harness/config.py)."""
     u = ex.get("_usage") or {}
-    return round(config.llm_cost(config.REFERENCE_MODELS["multi"][0], u.get("input") or 0, u.get("cached_input") or 0,
+    return round(config.llm_cost(EXTRACT_MODEL, u.get("input") or 0, u.get("cached_input") or 0,
                                  u.get("output") or 0), 6)
 
 

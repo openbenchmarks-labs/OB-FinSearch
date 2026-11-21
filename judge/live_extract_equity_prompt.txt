@@ -1,7 +1,12 @@
 You are given search results for the query "{query}".
 Using ONLY these results, answer the question: What was the official closing share price of {name} ({ticker}) on {when}?
-Give the answer a careful analyst would give from these results. If the results don't state that
-day's close, give the figure they would most reasonably report, and say what time the results attach to it.
+Give the answer a careful analyst would give from these results. Report only a price that is written in the
+results, as written. Do not calculate one (for example from a change, a percentage or another price), and do
+not report a forecast, prediction, price target or projected price. A price counts as the close only if it was
+published after the 4:00 PM ET close: a quote captured during the trading day, including the day's row of a
+historical table shown while the market is still open, is an intraday price. If the results don't state that
+day's close, give the written figure they would most reasonably report, and say what time the results attach
+to it. If they state no price for the stock at all, return null.
 
 Results:
 {results}
