@@ -21,6 +21,7 @@ from .nimble import Nimble
 from .parallel import Parallel
 from .perplexity import Perplexity
 from .serp import Serp
+from .specstream import SpecStream
 from .tako import Tako
 from .tavily import Tavily
 from .tinyfish import TinyFish
@@ -31,6 +32,7 @@ TOOLS_DIR = Path(__file__).resolve().parents[2] / "tools"
 ADAPTERS: dict[str, type[Adapter]] = {
     "exa": Exa, "parallel": Parallel, "you": You, "tavily": Tavily, "nimble": Nimble, "firecrawl": Firecrawl,
     "tako": Tako, "tinyfish": TinyFish, "perplexity": Perplexity, "brave": Brave, "serp": Serp, "keenable": Keenable,
+    "specstream": SpecStream,
 }
 
 REGISTRY: dict[str, Adapter] = {}

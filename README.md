@@ -1,6 +1,6 @@
 # OB-FinSearch
 
-Open, independent benchmark of web search APIs for financial research agents: which search API helps an agent answer questions about equities, filings and crypto, including live stock closes and coin prices. The agent, prompt, search budget and grader stay fixed; only the search API changes. Search APIs measured: Brave, Exa, Firecrawl, Keenable, Nimble, Parallel, Perplexity, SERP, Tako, Tavily, TinyFish and You.com.
+Open, independent benchmark of web search APIs for financial research agents: which search API helps an agent answer questions about equities, filings and crypto, including live stock closes and coin prices. The agent, prompt, search budget and grader stay fixed; only the search API changes. Search APIs measured: Brave, Exa, Firecrawl, Keenable, Nimble, Parallel, Perplexity, SERP, SpecStream, Tako, Tavily, TinyFish and You.com.
 
 **Public dataset:** [`openbenchmarks/OB-FinSearch`](https://huggingface.co/datasets/openbenchmarks/OB-FinSearch)
 
@@ -19,9 +19,9 @@ For historical and multi-hop tasks, the agent receives only the question, date, 
 
 ## Tools evaluated
 
-12 search tools (18 setups) configured in [`tools/`](tools/README.md):
+13 search tools (19 setups) configured in [`tools/`](tools/README.md):
 
-`brave`, `exa`, `firecrawl`, `keenable`, `nimble`, `parallel`, `perplexity`, `serp`, `tako`, `tavily`, `tinyfish`, `you`
+`brave`, `exa`, `firecrawl`, `keenable`, `nimble`, `parallel`, `perplexity`, `serp`, `specstream`, `tako`, `tavily`, `tinyfish`, `you`
 
 ## Dataset
 
@@ -36,7 +36,7 @@ See [`data/README.md`](data/README.md) for the exact `.jsonl` file names and fie
 
 - [`data/`](data/README.md): Dataset layout, Hugging Face location, and file schemas (no question files committed).
 - [`harness/`](harness/README.md): `finsearch` CLI (`vendors`, `run`, `rejudge`, `summary`, `live-collect`, `live-grade`, `live-filings`), agent loop, and search adapters.
-- [`tools/`](tools/README.md): One `<tool>.yaml` config per search tool (12 tools, 18 setups).
+- [`tools/`](tools/README.md): One `<tool>.yaml` config per search tool (13 tools, 19 setups).
 - [`judge/`](judge/README.md): Answer judge, prompt, and board summary calculations.
 - [`benchmark.yaml`](benchmark.yaml): Benchmark contract, scope, and refresh cadence.
 - [`AGENTS.md`](AGENTS.md): Entry guide for coding agents.

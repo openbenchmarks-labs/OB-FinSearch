@@ -15,3 +15,4 @@ One file per search API. Each turns a query into that API's request and its repl
 - `perplexity.py` — Perplexity search. No page fetch.
 - `brave.py` — Brave search. No page fetch.
 - `serp.py` — Google results through a RapidAPI endpoint. No page fetch.
+- `specstream.py`: SpecStream search with one best passage per result and its publication date, and its extract endpoint as the page fetch.

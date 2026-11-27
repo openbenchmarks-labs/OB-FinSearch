@@ -1,0 +1,13 @@
+tool: specstream
+live_limit:          # the base plan allows 550 requests a minute per account
+  rps: 8
+  concurrent: 16
+setups:
+  specstream:
+    name: SpecStream
+    options:
+      extra:
+        compact: true
+    pricing:         # $5 per 1,000 searches of up to 10 results, $0.80 per 1,000 pages, specstream.ai/pricing
+      list_usd: 0.005
+      fetch_usd: 0.0008
